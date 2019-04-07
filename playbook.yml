@@ -18,3 +18,9 @@
       pacman:
         name: vim,git
         state: latest
+
+    - name: Install default SSH config to avoid broken pipes
+      copy:
+          src: ./files/ssh/config
+          dest: ~/.ssh/config
+
