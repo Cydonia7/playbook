@@ -50,3 +50,18 @@
           path: /tmp/yay/
       when: should_install_yay
 
+    - name: Download SF Mono font
+      become: true
+      get_url:
+          url: https://github.com/ZulwiyozaPutra/SF-Mono-Font/raw/master/SFMono-Medium.otf
+          dest: /usr/share/fonts/SFMono-Medium.otf
+          mode: 0777
+
+    - name: Regenerate font cache
+      command: fc-cache
+      changed_when: False
+
+    - name: Install Alacritty config
+      copy:
+          src: ./files/alacritty/alacritty.yml
+          dest: ~/.config/alacritty/alacritty.yml
