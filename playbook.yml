@@ -16,11 +16,37 @@
     - name: Install packages
       become: true
       pacman:
-        name: vim,git
+        name: vim,neovim,git,alacritty,tmux
         state: latest
 
     - name: Install default SSH config to avoid broken pipes
       copy:
           src: ./files/ssh/config
           dest: ~/.ssh/config
+
+    - name: Check if yay is installed
+      stat:
+          path: /usr/bin/yay
+      register: yay
+
+    - name: Determine if we should install yay
+      set_fact: should_install_yay={{ yay.stat.exists == False}}
+
+    - name: Clone yay
+      git:
+          repo: https://aur.archlinux.org/yay.git
+          dest: /tmp/yay
+      when: should_install_yay
+
+    - name: Install yay
+      command: makepkg -si --noconfirm
+      args:
+          chdir: /tmp/yay
+      when: should_install_yay
+
+    - name: Remove yay build files
+      file:
+          state: absent
+          path: /tmp/yay/
+      when: should_install_yay
 
