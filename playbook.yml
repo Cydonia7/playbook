@@ -78,6 +78,31 @@
           src: ./files/alacritty/alacritty.yml
           dest: ~/.config/alacritty/alacritty.yml
 
+    - name: Remove default terminal from menu
+      become: true
+      lineinfile:
+          path: /usr/share/applications/exo-terminal-emulator.desktop
+          regexp: '^Categories='
+          line: 'Categories=Utility;X-XFCE;'
+
+    - name: Add Alacritty to favorites menu
+      become: true
+      lineinfile:
+          path: /usr/share/applications/alacritty.desktop
+          regexp: '^Categories='
+          line: 'Categories=System;TerminalEmulator;X-Xfce-Toplevel;'
+      register: alacritty_menu
+
+    - name: Set favorites for the menu
+      lineinfile:
+          path: ~/.config/xfce4/panel/whiskermenu-8.rc
+          regex: '^favorites='
+          line: 'favorites=alacritty.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop,pamac-manager.desktop'
+
+    - name: Reload menu application list
+      shell: xfdesktop --reload
+      when: alacritty_menu.changed
+
     - name: Change shell to fish
       become: true
       user:
