@@ -16,7 +16,7 @@
     - name: Install packages
       become: true
       pacman:
-        name: vim,neovim,git,alacritty,tmux
+        name: vim,neovim,git,alacritty,tmux,fish
         state: latest
 
     - name: Ensure SSH config directory exists
@@ -77,3 +77,9 @@
       copy:
           src: ./files/alacritty/alacritty.yml
           dest: ~/.config/alacritty/alacritty.yml
+
+    - name: Change shell to fish
+      become: true
+      user:
+          name: "{{ lookup('env','USER') }}"
+          shell: /usr/bin/fish
