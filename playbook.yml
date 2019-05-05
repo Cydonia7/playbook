@@ -19,6 +19,12 @@
         name: vim,neovim,git,alacritty,tmux
         state: latest
 
+    - name: Ensure SSH config directory exists
+      file:
+        path: ~/.ssh/config
+        state: directory
+        recurse: yes
+
     - name: Install default SSH config to avoid broken pipes
       copy:
           src: ./files/ssh/config
@@ -60,6 +66,12 @@
     - name: Regenerate font cache
       command: fc-cache
       changed_when: False
+
+    - name: Ensure Alacritty config directory exists
+      file:
+        path: ~/.config/alacritty
+        state: directory
+        recurse: yes
 
     - name: Install Alacritty config
       copy:
