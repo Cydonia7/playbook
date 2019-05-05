@@ -16,7 +16,7 @@
     - name: Install packages
       become: true
       pacman:
-        name: vim,neovim,git,alacritty,tmux,fish
+        name: vim,git,alacritty,tmux,fish
         state: latest
 
     - name: Ensure SSH config directory exists
