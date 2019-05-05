@@ -116,22 +116,24 @@
           name: "{{ lookup('env','USER') }}"
           shell: /usr/bin/fish
 
-    - name: Create numlock script
-      become: true
-      copy:
-          src: ./files/numlock
-          dest: /usr/local/bin/numlock
+    - name: Check if numlockx is installed
+      stat:
+          path: /usr/bin/numlockx
+      register: numlockx
 
-    - name: Create numlock service
-      become: true
-      copy:
-          src: ./files/numlock.service
-          dest: /etc/systemd/system/numlock.service
-    
-    - name: Enable numlock service
-      become: true
-      systemd:
-          name: numlock
-          enabled: yes
-          masked: no
+    - name: Install numlockx
+      shell: yay -S numlockx --noconfirm
+      when: numlockx.stat.exists == False
 
+    - name: Run numlockx in LightDM
+      become: true
+      lineinfile:
+          path: /etc/lightdm/lightdm.conf
+          regex: 'greeter-setup-script='
+          line: 'greeter-setup-script=/usr/bin/numlockx on'
+
+    - name: Run numlockx when session starts
+      lineinfile:
+          path: ~/.xinitrc
+          line: 'numlockx &'
+          insertbefore: 'exec'
