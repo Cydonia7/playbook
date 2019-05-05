@@ -19,15 +19,15 @@
         name: vim,git,alacritty,tmux,fish
         state: latest
 
-    - name: Ensure SSH config directory exists
+    - name: Ensure SSH directory exists
       file:
-        path: ~/.ssh/config
+        path: ~/.ssh
         state: directory
         recurse: yes
 
     - name: Install default SSH config to avoid broken pipes
       copy:
-          src: ./files/ssh/config
+          src: ./files/ssh_config
           dest: ~/.ssh/config
 
     - name: Check if yay is installed
@@ -75,7 +75,7 @@
 
     - name: Install Alacritty config
       copy:
-          src: ./files/alacritty/alacritty.yml
+          src: ./files/alacritty.yml
           dest: ~/.config/alacritty/alacritty.yml
 
     - name: Remove default terminal from menu
@@ -115,3 +115,23 @@
       user:
           name: "{{ lookup('env','USER') }}"
           shell: /usr/bin/fish
+
+    - name: Create numlock script
+      become: true
+      copy:
+          src: ./files/numlock
+          dest: /usr/local/bin/numlock
+
+    - name: Create numlock service
+      become: true
+      copy:
+          src: ./files/numlock.service
+          dest: /etc/systemd/system/numlock.service
+    
+    - name: Enable numlock service
+      become: true
+      systemd:
+          name: numlock
+          enabled: yes
+          masked: no
+
