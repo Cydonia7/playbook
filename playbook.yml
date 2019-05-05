@@ -103,6 +103,13 @@
       shell: xfdesktop --reload
       when: alacritty_menu.changed
 
+    - name: Add colors to pacman
+      become: true
+      lineinfile:
+          path: /etc/pacman.conf
+          regex: '^#Color'
+          line: 'Color'
+
     - name: Change shell to fish
       become: true
       user:
