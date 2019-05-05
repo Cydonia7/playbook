@@ -107,7 +107,7 @@
       become: true
       lineinfile:
           path: /etc/pacman.conf
-          regex: '^#Color'
+          regex: 'Color'
           line: 'Color'
 
     - name: Change shell to fish
