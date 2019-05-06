@@ -110,6 +110,9 @@ live_config_reload: true
 enable_experimental_conpty_backend: false
 alt_send_esc: true
 
+shell:
+  program: /usr/bin/tmux
+
 key_bindings:
   # (Windows/Linux only)
   - { key: V,        mods: Control|Shift, action: Paste            }

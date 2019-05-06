@@ -116,6 +116,8 @@
           name: "{{ lookup('env','USER') }}"
           shell: /usr/bin/fish
 
+    # TODO : Install Oh my fish with git and other plugins
+
     - name: Check if numlockx is installed
       stat:
           path: /usr/bin/numlockx
