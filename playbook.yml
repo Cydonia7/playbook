@@ -139,3 +139,9 @@
           path: ~/.xinitrc
           line: 'numlockx &'
           insertbefore: 'exec'
+
+    - name: Install Tmux config
+      copy:
+          src: ./files/tmux.conf
+          dest: ~/.tmux.conf
+
